@@ -22,6 +22,7 @@ public:
 	int operator [](std::size_t index) const;
 
 	bool operator ==(vector_t const & other) const;
+	friend bool operator != (vector_t const & lhs, vector_t const & rhs);
 };
 
 bool operator !=(vector_t const & lhs, vector_t const & rhs);
