@@ -1,8 +1,11 @@
 #include <iostream>
+#include <algorithm>
+#include <cassert>
 
 using namespace std;
 
-template <typename T> class vector_t
+template <typename T>
+class vector_t
 {
 private:
 	T * elements_;
@@ -13,6 +16,8 @@ public:
 	vector_t(vector_t const & other);
 	vector_t & operator =(vector_t const & other);
 	~vector_t();
+
+	T & at(size_t index) const;
 
 	size_t size() const;
 	size_t capacity() const;
@@ -25,17 +30,16 @@ public:
 
 	bool operator ==(vector_t const & other) const;
 };
-
 template<typename T>
 bool operator !=(vector_t<T> const & lhs, vector_t<T> const & rhs);
 
 template <typename T>
 T & vector_t<T>::at(size_t index) const
 {
-    if(index >= capacity_){
-        throw "Index out of range!"; 
-    }
-    return elements_[index];
+	if (index >= capacity_) {
+		throw "Index out of range!";
+	}
+	return elements_[index];
 }
 
 template <typename T>
@@ -49,9 +53,9 @@ vector_t<T>::vector_t()
 template <typename T>
 vector_t<T>::vector_t(vector_t const & other)
 {
-	elements_ = new T [other.capacity()];
-	for (std::size_t i = 0; i < other.size(); ++i) {
-			elements_[i] = other.elements_[i];
+	elements_ = new T[other.capacity()];
+	for (size_t i = 0; i < other.size(); ++i) {
+		elements_[i] = other.elements_[i];
 	}
 	size_ = other.size();
 	capacity_ = other.capacity();
@@ -80,7 +84,7 @@ bool vector_t<T>::operator ==(vector_t const & other) const
 		return false;
 	}
 	for (size_t i = 0; i < capacity_; i++) {
-		if(elements_[i] != other.elements_[i]) return false;
+		if (elements_[i] != other.elements_[i]) return false;
 	}
 	return true;
 }
@@ -88,9 +92,9 @@ bool vector_t<T>::operator ==(vector_t const & other) const
 template <typename T>
 vector_t<T>::~vector_t()
 {
-    if(elements_!=nullptr){
-	delete[] elements_;
-    }
+	if (elements_ != nullptr) {
+		delete[] elements_;
+	}
 }
 
 template <typename T>
@@ -115,24 +119,24 @@ void vector_t<T>::push_back(T value)
 		elements_[0] = value;
 	}
 	else {
-		if(size_<capacity_){
+		if (size_<capacity_) {
 			size_++;
-			elements_[size_-1] = value;
+			elements_[size_ - 1] = value;
 		}
 		else if (size_ == capacity_) {
-		capacity_ *= 2;
-		size_++;
-		T *tmp = new T[size_-1];
-		for (size_t i = 0; i < size_-1; ++i) {
-			tmp[i] = elements_[i];
+			capacity_ *= 2;
+			size_++;
+			T *tmp = new T[size_ - 1];
+			for (size_t i = 0; i < size_ - 1; ++i) {
+				tmp[i] = elements_[i];
 			}
-		delete[] elements_;
-		elements_ = new T[capacity_];
-		for (size_t i = 0; i < size_; ++i) {
-			if( i != size_-1) elements_[i] = tmp[i];
-			else elements_[i] = value;
+			delete[] elements_;
+			elements_ = new T[capacity_];
+			for (size_t i = 0; i < size_; ++i) {
+				if (i != size_ - 1) elements_[i] = tmp[i];
+				else elements_[i] = value;
 			}
-		delete[] tmp;
+			delete[] tmp;
 		}
 	}
 }
@@ -143,7 +147,7 @@ void vector_t<T>::pop_back()
 	if (size_ == 0) {
 		return;
 	}
-	size_ --;
+	size_--;
 	if (size_ <= (capacity_ / 4)) {
 		capacity_ = capacity_ / 2;
 		T *elements = new T[capacity_];
@@ -161,26 +165,26 @@ void vector_t<T>::pop_back()
 template <typename T>
 T & vector_t<T>::operator [](size_t index)
 {
-    return elements_[index];
+	return elements_[index];
 }
 
 template <typename T>
 T vector_t<T>::operator [](size_t index) const
 {
-    return elements_[index];
+	return elements_[index];
 }
 
 template <typename T>
 bool operator !=(vector_t<T> const & lhs, vector_t<T> const & rhs)
-{ 
-	bool result=false;
-  	if(rhs.size()!=lhs.size()){
-    		return true;
- 	}
-  
- 	if(!(lhs==rhs)){
-      		result=true;
-      		return result;
-  	}
-  	return result;  
+{
+	bool result = false;
+	if (rhs.size() != lhs.size()) {
+		return true;
+	}
+
+	if (!(lhs == rhs)) {
+		result = true;
+		return result;
+	}
+	return result;
 }
